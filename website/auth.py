@@ -15,7 +15,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                flash("Logged in!")
+                flash("Logged in!", category = 'success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
             else:
@@ -23,7 +23,7 @@ def login():
         else:
             flash("Email does not exist.", category='error')
 
-    return render_template("login.html")
+    return render_template("login.html", user=current_user)
 
 @auth.route("/sign_up", methods= ['GET', 'POST'])
 def sign_up():
@@ -41,11 +41,11 @@ def sign_up():
             flash("Username is alredy in use", category='error')
         elif password1 != password2:
             flash("Password don't match!", category='error')
-        elif len(username) < 4:
+        elif len(username) < 2:
             flash("Username is too short.", category='error')
-        elif len(username) < 6:
+        elif len(password1) < 6:
             flash("Password is too short.", category='error')
-        elif len(email) < 6:
+        elif len(email) < 4:
             flash("Email is invalid.", category='error')
         else:
             new_user = User(email=email, username=username, password= generate_password_hash(password1, method= 'sha256'))
@@ -55,7 +55,7 @@ def sign_up():
             flash("User created!")
             return redirect(url_for('views.home'))
 
-    return render_template("sign_up.html")
+    return render_template("sign_up.html", user=current_user)
 
 @auth.route("/logout")
 @login_required

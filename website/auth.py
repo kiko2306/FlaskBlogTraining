@@ -17,7 +17,7 @@ def login():
             if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
                 flash("Logged in!", category = 'success')
                 login_user(user, remember=True)
-                return render_template('homepage.html', user=current_user)
+                return redirect(url_for('views.homepage'))
             else:
                 flash("Password is incorrect.", category='error')
         else:
@@ -61,4 +61,4 @@ def sign_up():
 @login_required
 def logout():
     logout_user()
-    return render_template('home.html', user=current_user) # when I redirect to a function I can change the url and I won't loose the connection
+    return redirect(url_for('views.home')) # when I redirect to a function I can change the url and I won't loose the connection

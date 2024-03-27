@@ -1,8 +1,12 @@
-{% extends "posst_div.html" %}
+{% extends "posts_div.html" %}
 {% block title%}{{username}}'s Posts{% endblock %}
 {% block header%}
 {{username}}'s Posts
 {% endblock %}
-{% block content%}
-<h1 style="text-align: center;">{{username}}'s Posts</h1>
+{% block footer%}
+    <div style="text-align: center;">
+        <a href="/homepage">
+            <button type="button" class="btn btn-primary btn-lg">Back</button>
+        </a>
+    </div>
 {% endblock %}

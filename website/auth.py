@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from . import db
 from .models import User
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
+import bcrypt
 
 auth= Blueprint("auth", __name__)
 
@@ -14,10 +14,10 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user:
-            if check_password_hash(user.password, password):
+            if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
                 flash("Logged in!", category = 'success')
                 login_user(user, remember=True)
-                return redirect(url_for('views.home'))
+                return render_template('homepage.html', user=current_user)
             else:
                 flash("Password is incorrect.", category='error')
         else:
@@ -48,10 +48,10 @@ def sign_up():
         elif len(email) < 4:
             flash("Email is invalid.", category='error')
         else:
-            new_user = User(email=email, username=username, password= generate_password_hash(password1, method= 'sha256'))
+            hashed_password = bcrypt.hashpw(password1.encode('utf-8'), bcrypt.gensalt())
+            new_user = User(email=email, username=username, password=hashed_password.decode('utf-8'))
             db.session.add(new_user)
             db.session.commit()
-            login_user(new_user, remember= True)
             flash("User created!")
             return redirect(url_for('views.home'))
 
@@ -61,4 +61,4 @@ def sign_up():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("views.home")) # when I redirect to a function I can change the url and I won't loose the connection
+    return render_template('home.html', user=current_user) # when I redirect to a function I can change the url and I won't loose the connection

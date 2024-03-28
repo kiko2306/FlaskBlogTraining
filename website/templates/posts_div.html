@@ -4,30 +4,57 @@
 <h1 style="text-align: center;">
     {% block header%}Posts{% endblock %}</h1>
 <div id="posts">
+    <!-- this loop will print on the screen all posts whatever the author -->
     {% for post in posts %}
     <div class="card border-dark">
+        <!-- **these classes are from bootstrap** -->
         <div class="card-header d-flex justify-content-between align-items-center">
+            <!-- link to posts of a determined user -->
             <a href="/posts/{{post.user.username}}">{{post.user.username}}</a>
+            <!-- condition that allow only the author to delete the post -->
             {% if user.id == post.author %}
                 <div class="btn-group">
+                    <!-- kind of dropdown button -->
                     <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                    <!-- links of the dropdown button -->
                     <ul class="dropdown-menu">
                         <li><a href="/delete_post/{{post.id}}" class="dropdown-item">Delete</a></li>
                     </ul>
                 </div>
             {% endif %}
         </div>
+        <!-- show the text of the post from for loop -->
         <div class="card-body">
-            <div class="card-text">{{post.text}}
-            </div>
+            <div class="card-text">{{post.text}}</div>
+            <br>
+            <div class="" id="comments_{{post.id}}">
+                <div class="card">
+                    <div class="card-body" id="comments-expanded_{{post.id}}">
+                        {% for comment in post.comments %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <a href="/post/{{comment.user.username}}">{{comment.user.username}}</a>:{{comment.text}}
+                            </div>
+                            <div>
+                                <small class="text-muted">{{comment.date_created}}</small>
+                            </div>
+                        </div>{%endfor%}
+                    </div>
+                </div>
+            </div> <br>
+            <form action="/create_comment/{{post.id}}" class="input-group mb-3" method="POST">
+                <input type="text" id="text" name="text" class="form-control" placeholder="comment something!">
+                <button type="submit" class="btn btn-primary">Comment</button>
+            </form>
         </div>
+        <!-- show the date that the post was created -->
         <div class="card-footer text-muted">{{post.date_created}}</div>
     </div>
     <br>{% endfor %}
 </div>
-{% endblock %}
 {% block footer %}
 <div style="text-align: center;">
     <a href="/create_post"><button type="button" class="btn btn-primary btn-lg">Create a Post</button></a>
 </div>
+{% endblock %}
 {% endblock %}

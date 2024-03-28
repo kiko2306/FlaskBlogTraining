@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-{% block title%}Home{% endblock %}
+{% block title%}{% endblock %}
 {% block content%}
-<h1 style="text-align: center;">{% block header%}Posts{% endblock %}</h1>
+<h1 style="text-align: center;">
+    {% block header%}Posts{% endblock %}</h1>
 <div id="posts">
     {% for post in posts %}
     <div class="card border-dark">
@@ -24,9 +25,9 @@
     </div>
     <br>{% endfor %}
 </div>
+{% endblock %}
 {% block footer %}
 <div style="text-align: center;">
     <a href="/create_post"><button type="button" class="btn btn-primary btn-lg">Create a Post</button></a>
 </div>
-{% endblock %}
 {% endblock %}

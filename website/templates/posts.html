@@ -1,12 +1,9 @@
 {% extends "posts_div.html" %}
 {% block title%}{{username}}'s Posts{% endblock %}
-{% block header%}
-{{username}}'s Posts
-{% endblock %}
-{% block footer%}
-    <div style="text-align: center;">
-        <a href="/homepage">
-            <button type="button" class="btn btn-primary btn-lg">Back</button>
-        </a>
-    </div>
+#the block content is already definied at the posts_div file
+{% block header %}{{username}}'s Posts {% endblock %}
+{% block footer %}
+<div style="text-align: center;">
+    <a href="/homepage"><button type="button" class="btn btn-primary btn-lg">Back</button></a>
+</div>
 {% endblock %}
